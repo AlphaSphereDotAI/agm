@@ -1,19 +1,30 @@
-# Project Context for agm
+# Project Context: agm (Agent Manager)
 
 ## Project Overview
 
-**agm (Agent Manager)** is a Rust-based CLI tool designed to help developers
-manage, download, and configure AI agent skills and MCP servers using GitHub
-as a primary registry.
+**agm (Agent Manager)** is a Rust-based CLI tool designed to help
+developers manage, download, and configure AI agent skills and Model
+Context Protocol (MCP) servers. It uses GitHub as a primary registry
+for discovering and installing these components.
 
 - **Main Technologies:**
-  - `clap` (CLI parser)
-  - `tokio` (async runtime)
-  - `reqwest` (HTTP client)
-  - `serde` (serialization)
-  - `miette` (error reporting)
-- **Architecture:** A modular CLI application. The core command logic is being
-  built out in subcommands (e.g., `search`, `install`).
+  - **Language:** Rust (2024 edition)
+  - **CLI Parser:** `clap` (with `derive` features)
+  - **Async Runtime:** `tokio`
+  - **HTTP Client:** `reqwest` (with `rustls-tls`)
+  - **Serialization:** `serde` and `serde_json`
+  - **Error Handling:** `miette` (fancy reporting) and `anyhow`
+  - **Testing:** `assert_cmd`, `predicates`
+
+- **Architecture:**
+  - Modular CLI structure with subcommands.
+  - Core logic resides in :
+    - `src/`
+      - `cli`
+      - `client`
+      - `config`
+      - `registry`
+      - `utils`
 
 ## Building and Running
 
@@ -25,3 +36,20 @@ The project uses standard Rust tooling and `devenv` for environment management.
 - **Run Tests:** `cargo test`
 - **Linting:** `cargo clippy`
 - **Formatting:** `cargo fmt`
+
+## Development Conventions
+
+### Quality Standards
+
+- **Documentation:** All public functions and methods must be documented.
+- **Non-Interactive:** Prefer non-interactive commands; use `CI=true`.
+
+### Commit Guidelines
+
+Follow the conventional commits format: `<type>(<scope>): <description>`.
+Common types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`.
+
+## Key Directories
+
+- `src/`: Application source code.
+- `tests/`: Integration tests.
