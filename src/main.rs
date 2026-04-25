@@ -8,9 +8,8 @@ use std::process::ExitCode;
 
 fn main() -> ExitCode {
     let cli: Cli = Cli::parse();
-    let version = env!("CARGO_PKG_VERSION");
 
-    match run(cli, version) {
+    match run(cli) {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
             eprintln!("{error:#}");

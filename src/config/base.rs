@@ -4,7 +4,8 @@ use serde_json::to_string_pretty;
 use std::fs::{read_to_string, write};
 use std::path::Path;
 
-pub const CONFIG_FILE: &str = "agm.json";
+const CONFIG_FILE: &str = "agm.json";
+const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Base {
@@ -15,9 +16,9 @@ pub struct Base {
 
 impl Base {
     /// Creates a new default AGM config.
-    pub fn new(version: String) -> Self {
+    pub fn new() -> Self {
         Self {
-            version,
+            version: APP_VERSION.to_string(),
             skills: Vec::new(),
             mcps: Vec::new(),
         }
@@ -25,8 +26,8 @@ impl Base {
 }
 
 /// Initializes the config file at the given path.
-pub fn init_config(path: impl AsRef<Path>, config: &Base) -> Result<()> {
-    let path = path.as_ref();
+pub fn init_config(config: &Base) -> Result<()> {
+    let path = Path::new(CONFIG_FILE);
 
     if path.exists() {
         bail!(
@@ -38,12 +39,14 @@ pub fn init_config(path: impl AsRef<Path>, config: &Base) -> Result<()> {
     let content = to_string_pretty(config).context("failed to serialize config")?;
     write(path, format!("{content}\n"))
         .with_context(|| format!("failed to write '{}'", path.display()))?;
+    
+    println!("Created {}.", path.display());
     Ok(())
 }
 
 /// Loads the config file from the given path.
-pub fn load_config(path: impl AsRef<Path>) -> Result<Base> {
-    let path = path.as_ref();
+pub fn load_config() -> Result<Base> {
+    let path = Path::new(CONFIG_FILE);
 
     if !path.exists() {
         bail!(
